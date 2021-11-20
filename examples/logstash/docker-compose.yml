@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  logstash:
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
+    expose:
+      - 2021
+    ports:
+      - 2021:2021
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - opensearch
+
+  opensearch:
+    container_name: node-0.example.com
+    image: opensearchproject/opensearch:latest
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    environment:
+      - discovery.type=single-node
+
+  opensearch-dashboard:
+    container_name: opensearch-dashboard
+    image: opensearchproject/opensearch-dashboards:latest
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_URL: https://node-0.example.com:9200
+      OPENSEARCH_HOSTS: https://node-0.example.com:9200
