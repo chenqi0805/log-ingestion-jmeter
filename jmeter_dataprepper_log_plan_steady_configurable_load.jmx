@@ -52,6 +52,11 @@
                 <stringProp name="Argument.value">/log/ingest</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
+              <elementProp name="ssl" elementType="Argument">
+                <stringProp name="Argument.name">ssl</stringProp>
+                <stringProp name="Argument.value">false</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
               <elementProp name="timeoutMs" elementType="Argument">
                 <stringProp name="Argument.name">timeoutMs</stringProp>
                 <stringProp name="Argument.value">10000</stringProp>

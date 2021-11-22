@@ -1,5 +1,6 @@
 package com.amazon.dataprepper.log.generator;
 
+import com.linecorp.armeria.client.ClientFactory;
 import com.linecorp.armeria.client.WebClient;
 import com.linecorp.armeria.common.*;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -16,7 +17,7 @@ public class CleanSampler extends AbstractJavaSamplerClient implements Serializa
     private static final Logger LOGGER = LoggerFactory.getLogger(CleanSampler.class);
 
     private static final String LOG_URI_PATH = "/log/ingest";
-
+    private static final String SSL = "ssl";
     private static final String TARGET_ADDRESS = "targetAddress";
     private static final String URI_PATH = "uri";
     private static final String TIMEOUT_MS = "timeoutMs";
@@ -34,16 +35,23 @@ public class CleanSampler extends AbstractJavaSamplerClient implements Serializa
     public void setupTest(JavaSamplerContext javaSamplerContext) {
         String targetAddress = javaSamplerContext.getParameter(TARGET_ADDRESS);
         String targetPort = javaSamplerContext.getParameter(TARGET_PORT);
+        boolean ssl = Boolean.parseBoolean(javaSamplerContext.getParameter(SSL));
         uri = javaSamplerContext.getParameter(URI_PATH, "/");
         targetWithPort = targetAddress + ":" + targetPort;
 
         String timeoutMs = javaSamplerContext.getParameter(TIMEOUT_MS);
         this.timeoutMilliseconds = Integer.parseInt(timeoutMs);
 
-
-        webClient = WebClient.builder("http://" + targetWithPort)
-                .responseTimeoutMillis(timeoutMilliseconds)
-                .build();
+        if (ssl) {
+            webClient = WebClient.builder("https://" + targetWithPort)
+                    .factory(ClientFactory.insecure())
+                    .responseTimeoutMillis(timeoutMilliseconds)
+                    .build();
+        } else {
+            webClient = WebClient.builder("http://" + targetWithPort)
+                    .responseTimeoutMillis(timeoutMilliseconds)
+                    .build();
+        }
 
         String numLogsArg = javaSamplerContext.getParameter(NUM_LOGS);
         if (!StringUtils.isEmpty(numLogsArg)) {
@@ -57,6 +65,7 @@ public class CleanSampler extends AbstractJavaSamplerClient implements Serializa
         Arguments defaultParameters = new Arguments();
         defaultParameters.addArgument(TARGET_ADDRESS, "localhost");
         defaultParameters.addArgument(URI_PATH, LOG_URI_PATH);
+        defaultParameters.addArgument(SSL, "false");
         defaultParameters.addArgument(TIMEOUT_MS, "10000");
         defaultParameters.addArgument(TARGET_PORT, "2021");
         defaultParameters.addArgument(NUM_LOGS, "20");
