@@ -18,7 +18,7 @@
         <stringProp name="TargetLevel">${__tstFeedback(TPSShapingTimer, 1, 200, 10)}</stringProp>
         <stringProp name="RampUp"></stringProp>
         <stringProp name="Steps"></stringProp>
-        <stringProp name="Hold">60</stringProp>
+        <stringProp name="Hold">${__jexl2((${__P(duration, 3500)}+60)/60.0+0.5)}</stringProp>
         <stringProp name="LogFilename"></stringProp>
         <stringProp name="Iterations"></stringProp>
         <stringProp name="Unit">M</stringProp>
@@ -31,10 +31,10 @@
               <stringProp name="-1273575302">${__P(rps)}</stringProp>
               <stringProp name="1722">60</stringProp>
             </collectionProp>
-            <collectionProp name="-1496949657">
+            <collectionProp name="-1467917492">
               <stringProp name="-1273575302">${__P(rps)}</stringProp>
               <stringProp name="-1273575302">${__P(rps)}</stringProp>
-              <stringProp name="1571810">3500</stringProp>
+              <stringProp name="1802602989">${__P(duration, 3500)}</stringProp>
             </collectionProp>
           </collectionProp>
         </kg.apc.jmeter.timers.VariableThroughputTimer>
