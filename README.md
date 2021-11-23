@@ -2,7 +2,7 @@
 
 ## Setup on EC2
 
-run the following commands in a bash script:
+1. run the following commands in a bash script:
 
 ```
 # install Java
@@ -26,7 +26,36 @@ cd
 mv log-ingestion-jmeter/build/libs/log-ingestion-jmeter-1.0-SNAPSHOT.jar apache-jmeter-5.4.1/lib/ext/log-ingestion-jmeter-1.0-SNAPSHOT.jar
 ```
 
+2. run load generation by CLI execution
+
 An example CLI execution
 ```
 ./apache-jmeter-5.4.1/bin/jmeter -n -tlog-ingestion-jmeter/jmeter_dataprepper_log_plan_steady_configurable_load.jmx -JtargetAddress=<data-prepper-instance-public-ip> -JtargetPort=<data-prepper-http-source-port> -Jrps=20 -f -l log.jtl
 ```
+
+## Configuration Parameters
+
+Allows configuration by -J:
+
+### Java Request Sampler Client configurations
+
+* `targetAddress`(Required): A string represents data-prepper or logstash instance public endpoint without http or https header.
+* `uri`(Optional): A string represents data-prepper or logstash uri path. Defaults to `/log/ingest`. The default value is for data-prepper http source. For logstash, change it into `/`.
+* `ssl`(Optional): A boolean variable. `true` represents https. `false` represents http. Defaults to `false`.
+* `timeoutMs`(Optional): A number represents client request timeout in millis. Defaults to `10_000`.
+* `targetPort`(Optional): A number represents the port data-prepper or logstash is listening on. Defaults to `2021`.
+* `numLogs`(Optional): A number represents number of apache log jsons in the request body of a sample http request. Defaults to 20. Each apache log json takes the format
+
+```
+{"message": "<random apache log>"}
+```
+
+### JMeter load generation configuration
+
+* `rps`(Required): A number represents the target number of requests per second in [Throughput Shaping Timer](https://jmeter-plugins.org/wiki/ThroughputShapingTimer/)
+* `duration`(Optional): A number represents total seconds of producing the above `rps`. Defaults to 3500.
+
+Note: 
+1. In Throughput Shaping Timer RPS schedule, the first 60 seconds is used to achieve the target rps. So if the duration is set to be 300. The total duration will be 360 seconds.
+2. Under the hood, [Concurrency Thread Group](https://jmeter-plugins.org/wiki/ConcurrencyThreadGroup/) is used to produce the target rps. The target concurrency is set by [Schedule Feedback Function](https://jmeter-plugins.org/wiki/ThroughputShapingTimer/#Schedule-Feedback-Function)
+to be `${__tstFeedback(TPSShapingTimer, 1, 200, 10)}`. The Hold Target Rate Time is set to be greater than the total duration in Throughput Shaping Timer schedule.
