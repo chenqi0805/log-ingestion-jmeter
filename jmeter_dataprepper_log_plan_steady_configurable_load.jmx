@@ -49,27 +49,27 @@
               </elementProp>
               <elementProp name="uri" elementType="Argument">
                 <stringProp name="Argument.name">uri</stringProp>
-                <stringProp name="Argument.value">/log/ingest</stringProp>
+                <stringProp name="Argument.value">${__P(uri, /log/ingest)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="ssl" elementType="Argument">
                 <stringProp name="Argument.name">ssl</stringProp>
-                <stringProp name="Argument.value">false</stringProp>
+                <stringProp name="Argument.value">${__P(ssl, false)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="timeoutMs" elementType="Argument">
                 <stringProp name="Argument.name">timeoutMs</stringProp>
-                <stringProp name="Argument.value">10000</stringProp>
+                <stringProp name="Argument.value">${__P(timeoutMs, 10000)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="targetPort" elementType="Argument">
                 <stringProp name="Argument.name">targetPort</stringProp>
-                <stringProp name="Argument.value">2021</stringProp>
+                <stringProp name="Argument.value">${__P(targetPort, 2021)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="numLogs" elementType="Argument">
                 <stringProp name="Argument.name">numLogs</stringProp>
-                <stringProp name="Argument.value">20</stringProp>
+                <stringProp name="Argument.value">${__P(numLogs, 20)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
