@@ -30,6 +30,7 @@ public class CleanSampler extends AbstractJavaSamplerClient implements Serializa
     WebClient webClient;
     String targetWithPort;
     String uri;
+    SessionProtocol sessionProtocol;
     int numLogs = 20;
 
     public void setupTest(JavaSamplerContext javaSamplerContext) {
@@ -47,10 +48,12 @@ public class CleanSampler extends AbstractJavaSamplerClient implements Serializa
                     .factory(ClientFactory.insecure())
                     .responseTimeoutMillis(timeoutMilliseconds)
                     .build();
+            sessionProtocol = SessionProtocol.HTTPS;
         } else {
             webClient = WebClient.builder("http://" + targetWithPort)
                     .responseTimeoutMillis(timeoutMilliseconds)
                     .build();
+            sessionProtocol = SessionProtocol.HTTP;
         }
 
         String numLogsArg = javaSamplerContext.getParameter(NUM_LOGS);
@@ -83,7 +86,7 @@ public class CleanSampler extends AbstractJavaSamplerClient implements Serializa
             final HttpData httpData = apacheLogGenerator.generateRandomApacheLogHttpData(numLogs);
 
             HttpResponse response = webClient.execute(RequestHeaders.builder()
-                    .scheme(SessionProtocol.HTTP)
+                    .scheme(sessionProtocol)
                     .authority(targetWithPort)
                     .method(HttpMethod.POST)
                     .path(uri)
