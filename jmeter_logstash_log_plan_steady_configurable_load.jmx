@@ -69,7 +69,7 @@
               </elementProp>
               <elementProp name="numLogs" elementType="Argument">
                 <stringProp name="Argument.name">numLogs</stringProp>
-                <stringProp name="Argument.value">${__P(numLog, 20)}</stringProp>
+                <stringProp name="Argument.value">${__P(numLogs, 20)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
